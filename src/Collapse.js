@@ -23,12 +23,13 @@ export default class Collapse {
     this.copyBtn.className = 'copy-btn';
     this.copyBtn.textContent = 'Copy';
     
-    this.content.appendChild(this.copyBtn);
-    this.wrapper.appendChild(this.content);
-    this.container.appendChild(this.button);
-    this.container.appendChild(this.wrapper);
+    this.content.append(this.copyBtn);
+    this.wrapper.append(this.content);
+    this.container.append(this.button);
+    this.container.append(this.wrapper);
     
-    this.button.addEventListener('click', () => {
+    this.button.addEventListener('click', (e) => {
+      e.stopPropagation();
       if (this.isOpen) {
         this.close();
       } else {
@@ -51,12 +52,18 @@ export default class Collapse {
       });
     });
     
+    document.addEventListener('click', (e) => {
+      if (this.isOpen && !this.wrapper.contains(e.target) && e.target !== this.button) {
+        this.close();
+      }
+    });
+    
     this.close();
   }
   
   setContent(html) {
     this.content.innerHTML = html;
-    this.content.appendChild(this.copyBtn);
+    this.content.append(this.copyBtn);
   }
   
   open() {
